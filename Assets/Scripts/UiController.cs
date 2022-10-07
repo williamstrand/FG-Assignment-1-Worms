@@ -28,6 +28,7 @@ public class UiController : MonoBehaviour
         MovementController.OnMove.AddListener(UpdateMovementLeftBar);
         Character.OnModeChange.AddListener(UpdateCurrentModeVisual);
         WeaponsController.OnWeaponChange.AddListener(UpdateActiveWeapon);
+        GameController.OnGameOver.AddListener(GameOver);
     }
 
     void OnDisable()
@@ -38,6 +39,8 @@ public class UiController : MonoBehaviour
         MovementController.OnMove.RemoveListener(UpdateMovementLeftBar);
         Character.OnModeChange.RemoveListener(UpdateCurrentModeVisual);
         WeaponsController.OnWeaponChange.RemoveListener(UpdateActiveWeapon);
+        GameController.OnGameOver.RemoveListener(GameOver);
+
     }
 
     /// <summary>
@@ -112,5 +115,26 @@ public class UiController : MonoBehaviour
                 _currentWeaponVisual.SetActive(false);
                 break;
         }
+    }
+
+    void GameOver(GameController.Team winner)
+    {
+        DisableUi();
+    }
+
+    /// <summary>
+    /// Disables the ui.
+    /// </summary>
+    void DisableUi()
+    {
+        gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Enables the ui.
+    /// </summary>
+    void EnableUi()
+    {
+        gameObject.SetActive(true);
     }
 }

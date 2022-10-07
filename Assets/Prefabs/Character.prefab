@@ -789,7 +789,7 @@ MonoBehaviour:
   OnSetInactive:
     m_PersistentCalls:
       m_Calls: []
-  _canvas: {fileID: 3225870152012239251}
+  _hpBar: {fileID: 3225870152012239251}
   _nameUi: {fileID: 5354111127173751039}
   _hpSlider: {fileID: 8358443669312955040}
   CurrentMode: 0

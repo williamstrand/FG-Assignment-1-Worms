@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+using HelperFunctions;
 
 public class GameController : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class GameController : MonoBehaviour
 
     public static UnityEvent<Character> OnChangeFocus = new UnityEvent<Character>();
     public static UnityEvent<Character> OnActiveCharacterChange = new UnityEvent<Character>();
+    public static UnityEvent<Team> OnGameOver = new UnityEvent<Team>();
 
     public enum Team
     {
@@ -237,13 +240,8 @@ public class GameController : MonoBehaviour
     void EndGame(Team winner)
     {
         Time.timeScale = 0;
-        if(winner == Team.NoTeam)
-        {
-            Debug.Log("Tie");
-        }
-        else
-        {
-            Debug.Log($"Game Over. {winner + 1} has won!");
-        }
+        SceneManager.LoadScene(2, LoadSceneMode.Additive);
+        PlayerPrefs.SetInt("Winner", (int)winner);
+        OnGameOver?.Invoke(winner);
     }
 }

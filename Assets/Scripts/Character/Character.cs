@@ -15,7 +15,7 @@ public class Character : MonoBehaviour
     [HideInInspector]public UnityEvent OnSetInactive = new UnityEvent();
     
     [Header("UI Elements")]
-    [SerializeField] Canvas _canvas;
+    [SerializeField] Canvas _hpBar;
     [SerializeField] TextMeshProUGUI _nameUi;
     [SerializeField] Slider _hpSlider;
 
@@ -55,12 +55,13 @@ public class Character : MonoBehaviour
 
     void OnEnable()
     {
-        WeaponsController.OnWeaponFired.AddListener(OnWeaponFired);
+        WeaponsController.OnWeaponFired.AddListener(DisableControls);
+        GameController.OnGameOver.AddListener(HideHpBar);
     }
 
     void OnDisable()
     {
-        WeaponsController.OnWeaponFired.RemoveListener(OnWeaponFired);
+        WeaponsController.OnWeaponFired.RemoveListener(DisableControls);
     }
 
     /// <summary>
@@ -96,7 +97,7 @@ public class Character : MonoBehaviour
 
     void LateUpdate()
     {
-        _canvas.transform.LookAt(Camera.main.transform, Vector3.up);
+        _hpBar.transform.LookAt(Camera.main.transform, Vector3.up);
     }
 
     /// <summary>
@@ -107,7 +108,7 @@ public class Character : MonoBehaviour
         IsMyTurn = true;
         SetMode(Mode.Move);
         _controls.Enable();
-        _canvas.enabled = false;
+        HideHpBar();
         OnSetActive?.Invoke();
     }
 
@@ -118,7 +119,7 @@ public class Character : MonoBehaviour
     {
         IsMyTurn = false;
         _controls.Disable();
-        _canvas.enabled = true;
+        ShowHpBar();
         SetMode(Mode.Move);
         OnSetInactive?.Invoke();
     }
@@ -138,9 +139,30 @@ public class Character : MonoBehaviour
         OnModeChange?.Invoke(mode); 
     }
 
-    void OnWeaponFired()
+    /// <summary>
+    /// Disables controls.
+    /// </summary>
+    void DisableControls()
     {
         _controls.Disable();
+    }
+
+    /// <summary>
+    /// Hides hp bar over character.
+    /// </summary>
+    /// <param name="winner"></param>
+    void HideHpBar(GameController.Team winner = GameController.Team.NoTeam)
+    {
+        _hpBar.enabled = false;
+    }
+
+    /// <summary>
+    /// Shows hp bar over character.
+    /// </summary>
+    /// <param name="winner"></param>
+    void ShowHpBar(GameController.Team winner = GameController.Team.NoTeam)
+    {
+        _hpBar.enabled = true;
     }
 
     #endregion
